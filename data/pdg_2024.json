@@ -1,0 +1,150 @@
+{
+  "metadata": {
+    "source": "Particle Data Group 2024",
+    "url": "https://pdg.lbl.gov/",
+    "units": "MeV",
+    "description": "Standard Model particle masses for validation"
+  },
+  "leptons": {
+    "electron": {
+      "mass_mev": 0.51099895,
+      "uncertainty": 0.00000015,
+      "charge": -1
+    },
+    "muon": {
+      "mass_mev": 105.6583755,
+      "uncertainty": 0.0000023,
+      "charge": -1
+    },
+    "tau": {
+      "mass_mev": 1776.86,
+      "uncertainty": 0.12,
+      "charge": -1
+    }
+  },
+  "quarks": {
+    "up": {
+      "mass_mev": 2.2,
+      "uncertainty_range": [1.7, 3.3],
+      "charge": 0.667,
+      "notes": "MS-bar scheme at 2 GeV"
+    },
+    "down": {
+      "mass_mev": 4.7,
+      "uncertainty_range": [4.1, 5.8],
+      "charge": -0.333,
+      "notes": "MS-bar scheme at 2 GeV"
+    },
+    "strange": {
+      "mass_mev": 93,
+      "uncertainty_range": [80, 130],
+      "charge": -0.333,
+      "notes": "MS-bar scheme at 2 GeV"
+    },
+    "charm": {
+      "mass_mev": 1270,
+      "uncertainty": 20,
+      "charge": 0.667,
+      "notes": "MS-bar scheme"
+    },
+    "bottom": {
+      "mass_mev": 4180,
+      "uncertainty": 30,
+      "charge": -0.333,
+      "notes": "MS-bar scheme"
+    },
+    "top": {
+      "mass_mev": 172690,
+      "uncertainty": 300,
+      "charge": 0.667,
+      "notes": "On-shell scheme"
+    }
+  },
+  "gauge_bosons": {
+    "W": {
+      "mass_mev": 80377,
+      "uncertainty": 12,
+      "charge": 1
+    },
+    "Z": {
+      "mass_mev": 91187.6,
+      "uncertainty": 2.1,
+      "charge": 0
+    },
+    "photon": {
+      "mass_mev": 0,
+      "uncertainty": 0,
+      "charge": 0,
+      "notes": "Exact by gauge invariance"
+    }
+  },
+  "higgs": {
+    "higgs": {
+      "mass_mev": 125250,
+      "uncertainty": 170,
+      "charge": 0,
+      "notes": "Discovered at LHC"
+    }
+  },
+  "neutrinos": {
+    "electron_neutrino": {
+      "mass_mev": "< 1.1e-6",
+      "notes": "Upper limit from cosmology"
+    },
+    "muon_neutrino": {
+      "mass_mev": "< 0.19",
+      "notes": "Upper limit from direct measurement"
+    },
+    "tau_neutrino": {
+      "mass_mev": "< 18.2",
+      "notes": "Upper limit from direct measurement"
+    }
+  },
+  "recognition_science_assignments": {
+    "electron": {"rung": 32, "sector": "lepton"},
+    "muon": {"rung": 39, "sector": "lepton"},
+    "tau": {"rung": 44, "sector": "lepton"},
+    "up": {"rung": 33, "sector": "light_quark"},
+    "down": {"rung": 34, "sector": "light_quark"},
+    "strange": {"rung": 38, "sector": "light_quark"},
+    "charm": {"rung": 40, "sector": "heavy_quark"},
+    "bottom": {"rung": 45, "sector": "heavy_quark"},
+    "top": {"rung": 47, "sector": "heavy_quark"},
+    "W": {"rung": 52, "sector": "electroweak"},
+    "Z": {"rung": 53, "sector": "electroweak"},
+    "higgs": {"rung": 58, "sector": "higgs"}
+  },
+  "predictions": {
+    "dark_matter_candidates": {
+      "rung_60": {
+        "mass_gev": 311.5,
+        "sector": "dark_matter",
+        "notes": "No sector dressing"
+      },
+      "rung_61": {
+        "mass_gev": 504.1,
+        "sector": "dark_matter",
+        "notes": "No sector dressing"
+      },
+      "rung_62": {
+        "mass_gev": 815.6,
+        "sector": "dark_matter",
+        "notes": "No sector dressing"
+      }
+    },
+    "sterile_neutrino": {
+      "rung_65": {
+        "mass_gev": 3454.9,
+        "sector": "sterile",
+        "notes": "Potential sterile neutrino"
+      }
+    },
+    "new_heavy": {
+      "rung_70": {
+        "mass_gev": 38315.7,
+        "sector": "new_physics",
+        "notes": "Beyond Standard Model"
+      }
+    }
+  }
+} 
