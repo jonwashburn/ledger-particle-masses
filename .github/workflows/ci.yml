@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install Lean
+      run: |
+        curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y
+        echo "$HOME/.elan/bin" >> $GITHUB_PATH
+    
+    - name: Cache Lean dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cache/lean
+          lean/.lake
+        key: ${{ runner.os }}-lean-${{ hashFiles('lean/lake-manifest.json') }}
+        restore-keys: |
+          ${{ runner.os }}-lean-
+    
+    - name: Build Lean modules
+      run: |
+        cd lean
+        lake update
+        lake build MinimalNumerical
+        lake build SimpleNumerical
+    
+    - name: Run Python tests
+      run: |
+        python3 -m pip install --upgrade pip
+        python3 particle_mass_calculator.py --test
+    
+    - name: Verify zero sorries in completed modules
+      run: |
+        cd lean
+        # Check that MinimalNumerical has no sorries
+        if grep -q "sorry" MinimalNumerical.lean; then
+          echo "ERROR: Found 'sorry' in MinimalNumerical.lean"
+          exit 1
+        fi
+        # Check that SimpleNumerical has no sorries
+        if grep -q "sorry" SimpleNumerical.lean; then
+          echo "ERROR: Found 'sorry' in SimpleNumerical.lean"
+          exit 1
+        fi
+        echo "✓ No sorries found in completed modules" 
