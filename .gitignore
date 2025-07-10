@@ -1,0 +1,28 @@
+# Lean build artifacts
+lean/.lake/
+lean/build/
+*.olean
+*.ilean
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+
+# MacOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.bak
+*~ 

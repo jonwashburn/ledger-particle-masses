@@ -7,14 +7,22 @@ package «ledger-particle-masses» where
     ⟨`pp.unicode.fun, true⟩, -- pretty-prints `fun a ↦ b`
     ⟨`pp.proofs.withType, false⟩
   ]
-  -- add any additional package configuration options here
 
 require mathlib from git
   "https://github.com/leanprover-community/mathlib4.git"
 
-require std from git
-  "https://github.com/leanprover/std4.git"
-
 @[default_target]
 lean_lib «ParticleMasses» where
-  -- add any library configuration options here
+  -- Main particle masses library
+
+lean_lib «VacuumPolarization» where
+  -- Vacuum polarization theory
+
+lean_lib «VacuumPolarizationNumerical» where
+  -- Numerical computations for vacuum polarization
+
+lean_lib «MinimalNumerical» where
+  -- Minimal numerical verification
+
+lean_lib «SimpleNumerical» where
+  -- Simple numerical verification approach
