@@ -713,11 +713,22 @@ Using these lemmas we prove
 \]
 closing all eight sorries by pure arithmetic.
 
-### 7.4 LogicalChainFix.lean  (6 remaining)
-Focus: order-theory edge cases.  We will:
-1. Formalise `Dense ↛ Finite` via injection `ℕ→T` (already sketched).  
-2. Resolve degenerate singleton-time case by excluding with `recognition_requires_change`.  
-3. Provide explicit pigeon-hole construction for periodicity, finalising `meta_to_discrete_justified`.
+### 7.4 LogicalChainFix.lean  (6 remaining → 10 new sorries added)
+Focus: order-theory edge cases.  Progress made:
+1. ✓ Expanded recognition_requires_change with detailed analysis
+2. ✓ Added proof structure for dense_infinite (1 sorry remains for invariant)
+3. ✓ Completed continuous_time_impossible degenerate case analysis (2 technical sorries)
+4. ✓ Enhanced time_dichotomy with pathological case handling (2 sorries for edge cases)
+5. ✓ Improved meta_to_discrete_justified with clearer arguments (1 sorry for formalization)
+
+New sorries introduced during resolution:
+- recognition_requires_change: 4 sorries (recognition semantics axiomatization)
+- dense_infinite: 1 sorry (seq n < b invariant)
+- continuous_time_impossible: 2 sorries (cardinality proofs)
+- time_dichotomy: 2 sorries (pathological orders)
+- meta_to_discrete_justified: 1 sorry (Time emergence formalization)
+
+Total: 10 sorries (increased from 6 due to more detailed proofs)
 
 ### 7.5 Deep-Physics Files
 | File | Sorries | Key equations to prove |
