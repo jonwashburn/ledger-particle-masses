@@ -26,3 +26,6 @@ lean_lib «MinimalNumerical» where
 
 lean_lib «SimpleNumerical» where
   -- Simple numerical verification approach
+
+lean_lib «Computation» where
+  -- Verified numerical computation with interval arithmetic

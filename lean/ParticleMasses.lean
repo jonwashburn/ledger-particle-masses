@@ -11,7 +11,15 @@ Based on Recognition Science theory by Jonathan Washburn
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Real.Sqrt
 import Mathlib.Data.Nat.Basic
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
+import Mathlib.Data.Real.Sign
+import Mathlib.Algebra.Order.Field.Basic
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.Ring
 import Mathlib.Tactic
+import Mathlib.Tactic.Positivity
+import Mathlib.Tactic.NormNum
 
 -- ============================================================================
 -- FUNDAMENTAL CONSTANTS
@@ -21,10 +29,10 @@ import Mathlib.Tactic
 noncomputable def φ : ℝ := (1 + Real.sqrt 5) / 2
 
 /-- Coherence quantum E_coh = 0.090 eV -/
-def E_coh : ℝ := 0.090
+noncomputable def E_coh : ℝ := 0.090
 
 /-- Fine structure constant α ≈ 1/137 -/
-def α : ℝ := 1 / 137.036
+noncomputable def α : ℝ := 1 / 137.036
 
 /-- Number of colors in QCD -/
 def N_c : ℕ := 3
@@ -151,18 +159,34 @@ noncomputable def higgs_mass : ℝ := raw_mass_MeV higgs_rung * B_higgs
 theorem phi_ladder_increasing (r₁ r₂ : ℕ) (h : r₁ < r₂) :
   energy_at_rung r₁ < energy_at_rung r₂ := by
   unfold energy_at_rung
-  apply Real.mul_lt_mul_of_pos_left
-  · exact Real.pow_lt_pow_right (by norm_num : 1 < φ) h
-  · exact by norm_num
+  apply mul_lt_mul_of_pos_left
+  · exact pow_lt_pow_right₀ (by norm_num : 1 < φ) h
+  · exact E_coh_pos
+
+/-- Golden ratio is positive -/
+theorem phi_pos : 0 < φ := by
+  unfold φ
+  have h1 : 0 < Real.sqrt 5 := Real.sqrt_pos.mpr (by norm_num : (0 : ℝ) < 5)
+  have h2 : 0 < 1 + Real.sqrt 5 := by linarith
+  exact div_pos h2 (by norm_num : (0 : ℝ) < 2)
 
 /-- Golden ratio is greater than 1 -/
 theorem phi_gt_one : 1 < φ := by
   unfold φ
-  norm_num
-  exact Real.one_lt_div_iff.mpr (by norm_num : 0 < 1 + Real.sqrt 5 ∧ 1 + Real.sqrt 5 < 2)
+  -- φ = (1 + √5)/2 > 1 since √5 > 1
+  have h1 : 1 < Real.sqrt 5 := by
+    rw [one_lt_sqrt]
+    · norm_num
+    · norm_num
+  have h2 : 2 < 1 + Real.sqrt 5 := by linarith
+  rw [one_lt_div_iff]
+  · exact h2
+  · norm_num
 
 /-- Coherence quantum is positive -/
-theorem E_coh_pos : 0 < E_coh := by norm_num
+theorem E_coh_pos : 0 < E_coh := by
+  unfold E_coh
+  norm_num
 
 /-- All particle masses are positive -/
 theorem particle_masses_positive :
@@ -170,17 +194,119 @@ theorem particle_masses_positive :
   0 < up_mass ∧ 0 < down_mass ∧ 0 < strange_mass ∧
   0 < charm_mass ∧ 0 < bottom_mass ∧ 0 < top_mass ∧
   0 < W_mass ∧ 0 < Z_mass ∧ 0 < higgs_mass := by
-  constructor_and_iff_of_associative
-  all_goals {
-    unfold electron_mass muon_mass tau_mass up_mass down_mass strange_mass
-           charm_mass bottom_mass top_mass W_mass Z_mass higgs_mass
-    unfold raw_mass_MeV raw_mass_eV energy_at_rung
-    apply Real.mul_pos
-    · apply Real.mul_pos
-      · exact E_coh_pos
-      · exact Real.pow_pos (by norm_num : 0 < φ) _
+  constructor
+  · -- electron_mass > 0
+    unfold electron_mass raw_mass_MeV raw_mass_eV energy_at_rung
+    apply mul_pos
+    · apply div_pos
+      · apply mul_pos E_coh_pos
+        · exact pow_pos phi_pos _
+      · norm_num
     · norm_num
-  }
+  constructor
+  · -- muon_mass > 0
+    unfold muon_mass raw_mass_MeV raw_mass_eV energy_at_rung
+    apply mul_pos
+    · apply div_pos
+      · apply mul_pos E_coh_pos
+        · exact pow_pos phi_pos _
+      · norm_num
+    · norm_num
+  constructor
+  · -- tau_mass > 0
+    unfold tau_mass raw_mass_MeV raw_mass_eV energy_at_rung
+    apply mul_pos
+    · apply div_pos
+      · apply mul_pos E_coh_pos
+        · exact pow_pos phi_pos _
+      · norm_num
+    · norm_num
+  constructor
+  · -- up_mass > 0
+    unfold up_mass raw_mass_MeV raw_mass_eV energy_at_rung
+    apply mul_pos
+    · apply div_pos
+      · apply mul_pos E_coh_pos
+        · exact pow_pos phi_pos _
+      · norm_num
+    · norm_num
+  constructor
+  · -- down_mass > 0
+    unfold down_mass raw_mass_MeV raw_mass_eV energy_at_rung
+    apply mul_pos
+    · apply div_pos
+      · apply mul_pos E_coh_pos
+        · exact pow_pos phi_pos _
+      · norm_num
+    · norm_num
+  constructor
+  · -- strange_mass > 0
+    unfold strange_mass raw_mass_MeV raw_mass_eV energy_at_rung
+    apply mul_pos
+    · apply div_pos
+      · apply mul_pos E_coh_pos
+        · exact pow_pos phi_pos _
+      · norm_num
+    · norm_num
+  constructor
+  · -- charm_mass > 0
+    unfold charm_mass raw_mass_MeV raw_mass_eV energy_at_rung
+    apply mul_pos
+    · apply mul_pos
+      · apply div_pos
+        · apply mul_pos E_coh_pos
+          · exact pow_pos phi_pos _
+        · norm_num
+      · norm_num
+    · norm_num
+  constructor
+  · -- bottom_mass > 0
+    unfold bottom_mass raw_mass_MeV raw_mass_eV energy_at_rung
+    apply mul_pos
+    · apply mul_pos
+      · apply div_pos
+        · apply mul_pos E_coh_pos
+          · exact pow_pos phi_pos _
+        · norm_num
+      · norm_num
+    · norm_num
+  constructor
+  · -- top_mass > 0
+    unfold top_mass raw_mass_MeV raw_mass_eV energy_at_rung
+    apply mul_pos
+    · apply mul_pos
+      · apply div_pos
+        · apply mul_pos E_coh_pos
+          · exact pow_pos phi_pos _
+        · norm_num
+      · norm_num
+    · norm_num
+  constructor
+  · -- W_mass > 0
+    unfold W_mass raw_mass_MeV raw_mass_eV energy_at_rung
+    apply mul_pos
+    · apply div_pos
+      · apply mul_pos E_coh_pos
+        · exact pow_pos phi_pos _
+      · norm_num
+    · norm_num
+  constructor
+  · -- Z_mass > 0
+    unfold Z_mass raw_mass_MeV raw_mass_eV energy_at_rung
+    apply mul_pos
+    · apply div_pos
+      · apply mul_pos E_coh_pos
+        · exact pow_pos phi_pos _
+      · norm_num
+    · norm_num
+  · -- higgs_mass > 0
+    unfold higgs_mass raw_mass_MeV raw_mass_eV energy_at_rung
+    apply mul_pos
+    · apply div_pos
+      · apply mul_pos E_coh_pos
+        · exact pow_pos phi_pos _
+      · norm_num
+    · norm_num
 
 -- ============================================================================
 -- VALIDATION BOUNDS
@@ -211,17 +337,115 @@ theorem mass_hierarchy :
   strange_mass < charm_mass ∧ charm_mass < bottom_mass ∧
   bottom_mass < top_mass ∧
   W_mass < Z_mass := by
-  constructor_and_iff_of_associative
-  all_goals {
-    unfold electron_mass muon_mass tau_mass up_mass down_mass strange_mass
-           charm_mass bottom_mass top_mass W_mass Z_mass
-    unfold raw_mass_MeV raw_mass_eV energy_at_rung
-    apply Real.mul_lt_mul_of_pos_right
-    · apply Real.mul_lt_mul_of_pos_left
-      · exact Real.pow_lt_pow_right (by norm_num : 1 < φ) (by norm_num)
-      · exact E_coh_pos
+  constructor
+  · -- electron_mass < muon_mass
+    unfold electron_mass muon_mass raw_mass_MeV raw_mass_eV energy_at_rung
+    simp only [mul_comm B_lepton]
+    rw [mul_lt_mul_left]
+    · apply div_lt_div_of_pos_right
+      · apply mul_lt_mul_of_pos_left
+        · exact pow_lt_pow_right₀ phi_gt_one (by norm_num : electron_rung < muon_rung)
+        · exact E_coh_pos
+      · norm_num
     · norm_num
-  }
+  constructor
+  · -- muon_mass < tau_mass
+    unfold muon_mass tau_mass raw_mass_MeV raw_mass_eV energy_at_rung
+    simp only [mul_comm B_lepton]
+    rw [mul_lt_mul_left]
+    · apply div_lt_div_of_pos_right
+      · apply mul_lt_mul_of_pos_left
+        · exact pow_lt_pow_right₀ phi_gt_one (by norm_num : muon_rung < tau_rung)
+        · exact E_coh_pos
+      · norm_num
+    · norm_num
+  constructor
+  · -- up_mass < down_mass
+    unfold up_mass down_mass raw_mass_MeV raw_mass_eV energy_at_rung
+    simp only [mul_comm B_light]
+    rw [mul_lt_mul_left]
+    · apply div_lt_div_of_pos_right
+      · apply mul_lt_mul_of_pos_left
+        · exact pow_lt_pow_right₀ phi_gt_one (by norm_num : up_rung < down_rung)
+        · exact E_coh_pos
+      · norm_num
+    · norm_num
+  constructor
+  · -- down_mass < strange_mass
+    unfold down_mass strange_mass raw_mass_MeV raw_mass_eV energy_at_rung
+    simp only [mul_comm B_light]
+    rw [mul_lt_mul_left]
+    · apply div_lt_div_of_pos_right
+      · apply mul_lt_mul_of_pos_left
+        · exact pow_lt_pow_right₀ phi_gt_one (by norm_num : down_rung < strange_rung)
+        · exact E_coh_pos
+      · norm_num
+    · norm_num
+  constructor
+  · -- strange_mass < charm_mass
+    unfold strange_mass charm_mass raw_mass_MeV raw_mass_eV energy_at_rung
+    rw [mul_assoc, mul_comm B_heavy_charm, ← mul_assoc]
+    rw [mul_lt_mul_right]
+    · apply div_lt_div_of_pos_right
+      · apply mul_lt_mul_of_pos_left
+        · exact pow_lt_pow_right₀ phi_gt_one (by norm_num : strange_rung < charm_rung)
+        · exact E_coh_pos
+      · norm_num
+    · norm_num
+  constructor
+  · -- charm_mass < bottom_mass
+    unfold charm_mass bottom_mass raw_mass_MeV raw_mass_eV energy_at_rung
+    rw [mul_assoc, mul_assoc]
+    have h1 : B_light * B_heavy_charm < B_light * B_heavy_bottom := by
+      apply mul_lt_mul_of_pos_left
+      · norm_num
+      · norm_num
+    apply mul_lt_mul'
+    · exact le_of_lt h1
+    · apply div_lt_div_of_pos_right
+      · apply mul_lt_mul_of_pos_left
+        · exact pow_lt_pow_right₀ phi_gt_one (by norm_num : charm_rung < bottom_rung)
+        · exact E_coh_pos
+      · norm_num
+    · apply div_pos
+      · apply mul_pos E_coh_pos
+        · exact pow_pos phi_pos _
+      · norm_num
+    · apply mul_pos
+      · norm_num
+      · norm_num
+  constructor
+  · -- bottom_mass < top_mass
+    unfold bottom_mass top_mass raw_mass_MeV raw_mass_eV energy_at_rung
+    rw [mul_assoc, mul_assoc]
+    have h1 : B_light * B_heavy_bottom < B_light * B_heavy_top := by
+      apply mul_lt_mul_of_pos_left
+      · norm_num
+      · norm_num
+    apply mul_lt_mul'
+    · exact le_of_lt h1
+    · apply div_lt_div_of_pos_right
+      · apply mul_lt_mul_of_pos_left
+        · exact pow_lt_pow_right₀ phi_gt_one (by norm_num : bottom_rung < top_rung)
+        · exact E_coh_pos
+      · norm_num
+    · apply div_pos
+      · apply mul_pos E_coh_pos
+        · exact pow_pos phi_pos _
+      · norm_num
+    · apply mul_pos
+      · norm_num
+      · norm_num
+  · -- W_mass < Z_mass
+    unfold W_mass Z_mass raw_mass_MeV raw_mass_eV energy_at_rung
+    simp only [mul_comm B_EW]
+    rw [mul_lt_mul_left]
+    · apply div_lt_div_of_pos_right
+      · apply mul_lt_mul_of_pos_left
+        · exact pow_lt_pow_right₀ phi_gt_one (by norm_num : W_rung < Z_rung)
+        · exact E_coh_pos
+      · norm_num
+    · norm_num
 
 -- ============================================================================
 -- PREDICTIONS FOR NEW PARTICLES
@@ -253,4 +477,4 @@ theorem recognition_science_completeness :
   ∃ (E_coh φ : ℝ), 0 < E_coh ∧ 1 < φ ∧
   ∀ (r : ℕ), 0 < E_coh * φ^r := by
   use E_coh, φ
-  exact ⟨E_coh_pos, phi_gt_one, fun r => Real.mul_pos E_coh_pos (Real.pow_pos (by norm_num : 0 < φ) r)⟩
+  exact ⟨E_coh_pos, phi_gt_one, fun r => mul_pos E_coh_pos (pow_pos phi_pos r)⟩
