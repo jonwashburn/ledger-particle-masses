@@ -12,11 +12,12 @@
 2. **specific_error_bound** - Replaced with proper proof using `div_lt_iff` 
 3. **electron_mass_exact** - Replaced with calibration proof using `field_simp`
 
-### Sorries Remaining (7 total) 📋:
-1. **electron_mass_computation** - Computational verification (documented)
-2. **muon_mass_computation** - Computational verification (documented)  
-3. **muon_high_accuracy** - Computational proof (documented)
-4. **all_particles_reasonable_accuracy** - 14 computational cases (documented)
+### Sorries Remaining (17 total) 📋:
+1. **muon_high_accuracy** - Computational verification of muon accuracy
+2. **all_particles_reasonable_accuracy** - 14 computational cases for particles:
+   - tau, pi0, pi+-, K0, K+-, eta, Lambda, J/psi, Upsilon, B0, W, Z, H, top
+3. **electron_mass_computation** - Trivial lemma (returns True)
+4. **muon_mass_computation** - Trivial lemma (returns True)
 
 ### Build Issues Encountered 🚫:
 - Complex Mathlib dependencies causing long build times
