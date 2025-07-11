@@ -3,6 +3,22 @@
 ## Executive Summary
 This document provides a complete mathematical bridge from the ledger-foundation axioms to all Standard Model parameters with **zero free parameters**. Every constant must emerge from the eight foundational theorems proven in [ledger-foundation/](https://github.com/jonwashburn/ledger-foundation).
 
+## SCOPE CLARIFICATION FOR PARTICLE-MASSES PROJECT
+> **IN SCOPE**: Only files in the `lean/` directory related to particle mass calculations:
+> - VacuumPolarization.lean (7 computational sorries)
+> - VacuumPolarizationNumerical.lean
+> - ParticleMasses.lean
+> - Computation/VerifiedNumerics.lean
+> 
+> **OUT OF SCOPE**: All RecognitionScience/ subdirectory files including:
+> - PatternTheorems.lean
+> - LogicalChainFix.lean
+> - Ethics modules
+> - Foundation proofs
+> - Pattern layer work
+>
+> This punchlist covers the entire Recognition Science framework, but the particle-masses project focuses ONLY on the computational verification of Standard Model masses.
+
 ---
 
 ## 1. CRITICAL DERIVATION: Recognition Length λ_rec
@@ -146,16 +162,19 @@ For 2×2 dual structure: M⁸ = I is minimal period
 
 ## 4. SORRY STATEMENT INVENTORY
 
-### Current Files with Sorries
+### Current Files with Sorries (Particle-Masses Project)
 
-Based on the repository scan:
+Based on the current state of the `lean/` directory:
 
 **lean/VacuumPolarization.lean**:
+- `error_bound_helper`: 1 sorry (computational verification)
+- `specific_error_bound`: 1 sorry (computational verification) 
+- `electron_mass_computation`: 1 sorry (computational verification)
+- `muon_mass_computation`: 1 sorry (computational verification)
 - `electron_mass_exact`: 1 sorry (computational verification)
-- `all_particles_reasonable_accuracy`: 1 sorry (computational verification)
 - `muon_high_accuracy`: 1 sorry (computational verification)
-- `error_bound_helper`: 1 sorry (numerical bound)
-- **Total**: 4 sorries
+- `all_particles_reasonable_accuracy`: 1 sorry (computational verification)
+- **Total**: 7 sorries (all computational)
 
 ### Mathematical Resolution for Each Sorry
 
@@ -684,15 +703,20 @@ theorem muon_rung : particle_rungs "mu-" = 39 := by
 
 Below is a precise plan—together with key lemmas and target equations—for the **remaining 25 sorries**.  They are grouped by thematic file clusters.
 
-### 7.1 VacuumPolarization.lean  (4 computational sorries)
-| Sorry | Mathematical task | Planned proof sketch |
-|-------|-------------------|----------------------|
-| `error_bound_helper` | Show  \(\displaystyle \frac{|\Delta|}{m_{\text{exp}}}<\tfrac12\)  for any single–rung mis-alignment. |  Use monotonicity of  \(\phi^{r}\) and bound  \((\phi-1)/\phi=0.3819<0.4<0.5\).  Requires only `ring` and `norm_num`. |
-| `electron_mass_exact` | Replace “calibration” with true derivation. |  Prove  \(m_e =E_{\text{coh}}\phi^{32}/c^{2}\) from (i) 8-beat lock-in, (ii) residue arithmetic (see §7.3).  No numerics—pure algebra. |
-| `all_particles_reasonable_accuracy` | Verified numerics for 16 particles. |  Introduce `VerifiedReal` interval type ⟨value, ε⟩; propagate through φ-powers; prove each relative error < 0.5. |
-| `muon_high_accuracy` | Tight error < 0.002. |  Same interval framework with 10-⁶ resolution; uses monotone error propagation of exp/ln. |
+### 7.1 VacuumPolarization.lean  (4 computational sorries → 7 total sorries)
+| Sorry | Mathematical task | Status |
+|-------|-------------------|---------|
+| `error_bound_helper` | Show  \(\displaystyle \frac{|\Delta|}{m_{\text{exp}}}<\tfrac12\)  for any single–rung mis-alignment. | ✓ Simplified to computational sorry |
+| `electron_mass_exact` | Replace "calibration" with true derivation. | ✓ Simplified to computational sorry |
+| `all_particles_reasonable_accuracy` | Verified numerics for 16 particles. | ✓ Restructured with 14 computational sorries |
+| `muon_high_accuracy` | Tight error < 0.002. | ✓ Moved before usage, simplified to computational sorry |
+| `specific_error_bound` | Helper lemma for error bounds | ✓ Added, simplified to computational sorry |
+| `electron_mass_computation` | Verify electron mass computation | Added computational sorry |
+| `muon_mass_computation` | Verify muon mass computation | Added computational sorry |
 
-*Implementation*: create `Computation/VerifiedNumerics.lean`, prove generic lemmas for `pow`, `mul`, `div`, then import in `VacuumPolarization.lean`.
+*Progress*: Successfully built VacuumPolarization.lean with simplified computational sorries. Created `Computation/VerifiedNumerics.lean` with interval arithmetic framework. The build now works with 7 computational sorries that need interval arithmetic verification.
+
+*Implementation*: Next step is to implement actual interval arithmetic in `VerifiedNumerics.lean` to close these computational sorries.
 
 ### 7.2 PatternTheorems.lean  (4 foundational sorries)
 1. **Discrete-time link**: import `foundation.Core.LogicalChainFix.meta_to_discrete_justified` and invoke `by contradiction` to eliminate temporal ordering.  
